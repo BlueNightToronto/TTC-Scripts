@@ -878,9 +878,9 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.announce_trig) =
+										(L.L.clever_int_dest) =
 										{if}
-											2 (S.L.clever_LED_mode) <
+											(S.L.clever_LED_mode) 8 <
 												{if}
 												{else}
 													5 (S.L.clever_LED_mode)
