@@ -774,7 +774,7 @@
 			
 		l0 1 =
 			{if}
-			"Stop Request" (S.$.clever_LED)
+				"Stop Request" (S.$.clever_LED)
 			{endif}	
 			
 		l0 2 =
@@ -801,7 +801,7 @@
 			{if}
 				(L.L.clever_int_dest) 0 (M.V.GetTerminusString) (S.$.clever_LED)
 			{else}
-				(L.L.clever_LED_mode) 7 (M.V.GetTerminusString) (S.$.clever_LED)
+				(L.L.clever_int_dest) 7 (M.V.GetTerminusString) (S.$.clever_LED)
 				
 			{endif}	
 			
@@ -836,7 +836,8 @@
 											2 (S.L.clever_LED_mode)
 										{endif}
 									{endif}
-								{endif}	
+								{endif}
+							
 							
 							l0 2 = 
 								{if}
@@ -878,9 +879,9 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.clever_int_dest) =
+										(L.L.ext_announce_seq) 3 =
 										{if}
-											(S.L.clever_LED_mode) 8 <
+											(L.L.clever_int_dest) 8 < 
 												{if}
 												{else}
 													5 (S.L.clever_LED_mode)
@@ -911,7 +912,7 @@
 							0 (S.L.clever_LED_time)	
 						{endif}				
 			{endif}
-		{endif}
+		
 
 		
 ' ######### DAUERANZEIGE LOW LINE ##########
