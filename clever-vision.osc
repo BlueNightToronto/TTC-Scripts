@@ -588,7 +588,7 @@
 				
 				{else}
 				
-					(L.L.clever_stop) (S.L.clever_stop_display)
+					(L.L.clever_stop) (L.L.scroll) (S.L.clever_stop_display)
 					
 				{endif}
 			
@@ -765,11 +765,16 @@
 		l0 0 =
 			{if}
 			"OP ID - 73641" (S.$.clever_LED)
+					
+				(L.L.clever_run_active) !
+				{if}
+					0 (S.L.clever_LED_time)
+				{endif}
 			{endif}
 			
 		l0 1 =
 			{if}
-			"STOP REQUESTED" (S.$.clever_LED)
+				"STOP REQUESTED" (S.$.clever_LED) (L.S.scroll)
 			{endif}	
 			
 		l0 2 =
@@ -792,11 +797,12 @@
 		
 		l0 4 =
 			{if}
-			(C.L.display_black_sec) 2 <
+			(L.S.scroll) > 
 			{if}
-				(C.L.display_change_sec) 3 (S.$.clever_LED)
+				(C.L.display_black_sec) 0.15 (S.$.clever_LED)
 			{else}
-				(L.L.clever_LED_mode) 0 (S.$.clever_LED)
+				(S.L.clever_LED_mode) 0 (S.$.clever_LED)
+				
 				
 			{endif}	
 			
@@ -809,23 +815,23 @@
 					{if}
 						(L.S.Time) 3600 <
 							{if}
-								(L.S.Time) 3600 / 12 + s0 trunc s1 "02" $IntToStrEnh $+ ":" $+ 
+								(L.S.Time) 3600 / 12 + s0 trunc s1 "02" $IntToStrEnh $+ ":" $+
 								l0 l1 - 60 * s0 trunc s1 "02" $IntToStrEnh $+ " AM" $+
 							{else}
 								(L.S.Time) 43200 >
 								{if}
-									(L.S.Time) 3600 / s0 trunc s1 "02" $IntToStrEnh $+ ":" $+ 
+									(L.S.Time) 3600 / s0 trunc s1 "02" $IntToStrEnh $+ ":" $+
 									l0 l1 - 60 * s0 trunc s1 "02" $IntToStrEnh $+ " PM" $+
 								{else}
-									(L.S.Time) 3600 / s0 trunc s1 "02" $IntToStrEnh $+ ":" $+ 
+									(L.S.Time) 3600 / s0 trunc s1 "02" $IntToStrEnh $+ ":" $+
 									l0 l1 - 60 * s0 trunc s1 "02" $IntToStrEnh $+ " AM" $+
 								{endif}
 							{endif}
 					{else}
-						(L.S.Time) 43200 - 3600 / s0 trunc s1 "02" $IntToStrEnh $+ ":" $+ 
+						(L.S.Time) 43200 - 3600 / s0 trunc s1 "02" $IntToStrEnh $+ ":" $+
 						l0 l1 - 60 * s0 trunc s1 "02" $IntToStrEnh $+ " PM" $+
 					{endif}
-				
+
 				(S.$.clever_LED)
 			{endif}	
 			
@@ -834,14 +840,17 @@
 		(L.L.clever_LED_time) (L.S.Timegap) + (S.L.clever_LED_time)
 		
 		(L.L.clever_run_active) !
+		(L.L.haltewunschlampe) ! &&
 			{if}
-				0 (S.L.clever_LED_time) (S.L.clever_LED_mode)
+				0 (S.L.clever_LED_time)
+				2 (S.L.clever_LED_mode)
 			{endif}
+			
 		
 		(L.L.clever_LED_time) 
 		(C.L.display_change_sec) >
 			{if}
-				
+				"" (L.L.scroll)
 					(L.L.clever_LED_time) (C.L.display_change_sec) - (C.L.display_black_sec) >
 						{if}
 							(L.L.clever_LED_mode) s0
@@ -850,14 +859,15 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.haltewunschlampe) =
+										(L.L.scroll) =
 										{if}
-											(L.L.stop_request_trig)
-										{else}	
+											4 (S.L.clever_LED_mode)
+										{else}
 											2 (S.L.clever_LED_mode)
 										{endif}
 									{endif}
-								{endif}	
+								{endif}
+							
 							
 							l0 2 = 
 								{if}
@@ -883,10 +893,10 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(S.L.scroll) =
+										(L.L.scroll) =
 										{if}
 											4 (S.L.clever_LED_mode)
-										{else}	
+										{else}
 											2 (S.L.clever_LED_mode)
 										{endif}
 									{else}
@@ -899,12 +909,12 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.announce_trig) =
+										(L.L.scroll) =
 										{if}
 											(S.L.clever_LED_mode) 2 <
 												{if}
 												{else}
-													5 (S.L.clever_LED_mode)
+													4 (S.L.clever_LED_mode)
 												{endif}
 										{else}
 											2 (S.L.clever_LED_mode)
@@ -918,10 +928,10 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.S.scroll) =
+										(L.L.scroll) =
 										{if}
-											4 (S.L.clever_LED_mode)
-										{else}	
+											0 (S.L.clever_LED_mode)
+										{else}
 											2 (S.L.clever_LED_mode)
 										{endif}
 									{else}
@@ -934,10 +944,9 @@
 			{endif}
 			
 		(L.L.clever_run_active) !
-		(L.L.stop_request_trig) >
-		(S.L.clever_LED_mode) 1 > &&
+		(L.L.clever_LED_mode) 1 > &&
 			{if}
-				0 (S.L.clever_LED_mode) (S.L.clever_LED_time)
+				0 (S.L.clever_LED_mode)
 			{endif}
 		
 ' ######### DAUERANZEIGE LOW LINE ##########
@@ -1114,6 +1123,7 @@
 										{if}
 											(M.V.GetTTBusstopIndex) (S.L.clever_stop)
 											(M.L.announce_pre)
+											(T.L.scroll)
 										{endif}										
 										
 										3 (S.L.clever_vis_run)
@@ -1471,7 +1481,7 @@
 {end}
 
 {macro:announce_pre}
-	(L.L.globaltimer) (S.L.announce_pre_time)
+	(L.L.globaltimer) (S.L.announce_pre_time) (T.L.announce_trig)
 {end}
 
 {macro:announce_call}
