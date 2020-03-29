@@ -1,7 +1,6 @@
 '##############
 'Clever Dev RBL
 '##############
-'test
 
 '2015 Darius Bode
 '2017 Modded John M.
@@ -342,8 +341,8 @@
 	
 	(L.L.clever_screen) 9 <=
 		{if}
-			1 (S.L.clever_LED_malf)
-			4 (S.L.clever_LED_mode)
+			0 (S.L.clever_LED_malf)
+			2 (S.L.clever_LED_mode)
 		{endif}	
 	(T.L.ev_clever_key)		
 {end}
@@ -583,19 +582,19 @@
 					(L.L.clever_LED_mode) 2 >= ! &&
 					(L.L.clever_stop_display_fwd) 1 = &&
 						{if}
-							(L.L.clever_stop_display) 1 + (S.L.clever_stop_display)
-							0 (S.L.clever_stop_display_fwd)
+							(L.L.clever_stop_display) 1 + (S.L.clever_stop_display) (L.L.scroll)
+							0 (S.L.clever_stop_display_fwd) (C.L.display_black_sec)
 						{endif}
 				
 				{else}
 				
-					(L.L.clever_stop) (L.L.scroll) (S.L.clever_stop_display)
+					(L.L.clever_stop) (S.L.clever_stop_display) (C.L.display_black_sec)
 					
 				{endif}
 			
 		{else}
 		
-			0 (S.L.clever_stop_display) (S.L.clever_stop_display_fwd)
+			0 (S.L.clever_stop_display) (L.L.scroll) (S.L.clever_stop_display_fwd)
 			
 		{endif}
 	
@@ -732,16 +731,97 @@
 			(L.L.timetable_findrun) &&
 			(L.L.globaltimer) 1 > &&
 			{if}
-					0 (S.L.clever_finalstop)
-					(L.L.schedule_active)
-						{if}							
-							0 999 random (S.L.timetable_run)
+				4 (M.V.GetDepotStringGlobal) "RUNSHEET" $=
+					{if}
+						(L.L.schedule_active)
+						{if}
+						0 (S.L.clever_finalstop)
+
+' ########################################################################################################################################################################			
+'					MON-FRI
+' ########################################################################################################################################################################
+						(L.L.wochentag) 1 >= (L.L.wochentag) 6 < &&
+							{if}
+								(M.V.GetTTLineString) "56" $=	
+									{if}
+										0 (M.V.GetTTBusstopName) "Tyrell Avenue 1" $= 25 (M.V.GetTTBusstopName) "Tyrell Avenue 1" $= || {if} 05 (S.L.timetable_run) {endif}
+										0 (M.V.GetTTBusstopName) "Tyrell Avenue 2" $= 25 (M.V.GetTTBusstopName) "Tyrell Avenue 2" $= || {if} 06 (S.L.timetable_run) {endif}
+										0 (M.V.GetTTBusstopName) "Tyrell Avenue 3" $= 25 (M.V.GetTTBusstopName) "Tyrell Avenue 3" $= || {if} 07 (S.L.timetable_run) {endif}
+									{endif}
+								(M.V.GetTTLineString) "81" $=	
+									{if}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 1" $= {if} 01 (S.L.timetable_run) {endif}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 2" $= {if} 02 (S.L.timetable_run) {endif}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 3" $= {if} 03 (S.L.timetable_run) {endif}
+									{endif}
+									
+								(M.V.GetTTLineString) "56" $= ! (M.V.GetTTLineString) "81" $= ! ||
+								(L.L.timetable_run) 0 = &&
+									{if}
+										0 999 random (S.L.timetable_run)
+									{endif}
+							{endif}
+							
+' ########################################################################################################################################################################			
+'					SATURDAY
+' ########################################################################################################################################################################
+						(L.L.wochentag) 6 =
+							{if}
+								(M.V.GetTTLineString) "81" $=	
+									{if}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 1" $= 1 (M.V.GetTTBusstopName) "Sheppard Stn 1" $= || {if} 01 (S.L.timetable_run) {endif}
+									{endif}
+									
+								(M.V.GetTTLineString) "81" $= !
+								(L.L.timetable_run) 0 = &&
+									{if}
+										0 999 random (S.L.timetable_run)
+									{endif}
+							{endif}
+' ########################################################################################################################################################################			
+'					SUNDAY
+' ########################################################################################################################################################################
+						(L.L.wochentag) 0 =
+							{if}
+								(M.V.GetTTLineString) "56" $=	
+									{if}
+										0 (M.V.GetTTBusstopName) "Tyrell Avenue 1" $= 25 (M.V.GetTTBusstopName) "Tyrell Avenue 1" $= || {if} 05 (S.L.timetable_run) {endif}
+										0 (M.V.GetTTBusstopName) "Tyrell Avenue 2" $= 25 (M.V.GetTTBusstopName) "Tyrell Avenue 2" $= || {if} 06 (S.L.timetable_run) {endif}
+										0 (M.V.GetTTBusstopName) "Tyrell Avenue 3" $= 25 (M.V.GetTTBusstopName) "Tyrell Avenue 3" $= || {if} 07 (S.L.timetable_run) {endif}
+									{endif}
+								(M.V.GetTTLineString) "81" $=	
+									{if}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 1" $= {if} 01 (S.L.timetable_run) {endif}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 2" $= {if} 02 (S.L.timetable_run) {endif}
+										1 (M.V.GetTTBusstopName) "Quail Valley Loop 3" $= {if} 03 (S.L.timetable_run) {endif}
+									{endif}
+									
+								(M.V.GetTTLineString) "81" $= !
+								(L.L.timetable_run) 0 = &&
+									{if}
+										0 999 random (S.L.timetable_run)
+									{endif}
+							{endif}
+
+
+						(L.L.wochentag) 6 >
+							{if}
+								0 999 random (S.L.timetable_run)
+							{endif}
 						{else}
 							0 (S.L.timetable_run)
-						{endif}	
-						
-					0 (S.L.timetable_findrun) 
-					1 (S.L.AI_init)
+						{endif}
+' ########################################################################################################################################################################
+					{else}
+						(L.L.schedule_active)
+							{if}
+								0 999 random (S.L.timetable_run)
+							{else}
+								0 (S.L.timetable_run)
+							{endif}
+					{endif}
+				0 (S.L.timetable_findrun)
+				1 (S.L.AI_init)
 			{endif}
 
 ' ########################################################################################################################################################################
@@ -766,16 +846,11 @@
 		l0 0 =
 			{if}
 			"OP ID - 73641" (S.$.clever_LED)
-					
-				(L.L.clever_run_active) !
-				{if}
-					0 (S.L.clever_LED_time)
-				{endif}
 			{endif}
 			
 		l0 1 =
 			{if}
-				"STOP REQUESTED" (S.$.clever_LED) (L.S.scroll)
+			"STOP REQUESTED" (S.$.clever_LED)
 			{endif}	
 			
 		l0 2 =
@@ -795,15 +870,14 @@
 					{endif}
 				(L.$.clever_LED_stopname) (S.$.clever_LED)
 			{endif}	
-		
+
 		l0 4 =
 			{if}
-			(L.S.scroll) > 
+			(C.L.display_black_sec) 0.15 <
 			{if}
-				(C.L.display_black_sec) 0.15 (S.$.clever_LED)
+				(L.L.clever_LED_mode) 2 (S.$.clever_LED)
 			{else}
-				(S.L.clever_LED_mode) 0 (S.$.clever_LED)
-				
+				(L.L.clever_LED_mode) 0 (S.$.clever_LED)
 				
 			{endif}	
 			
@@ -843,15 +917,14 @@
 		(L.L.clever_run_active) !
 		(L.L.haltewunschlampe) ! &&
 			{if}
-				0 (S.L.clever_LED_time)
-				2 (S.L.clever_LED_mode)
+				0 (S.L.clever_LED_time) (S.L.clever_LED_mode)
 			{endif}
 			
 		
 		(L.L.clever_LED_time) 
 		(C.L.display_change_sec) >
 			{if}
-				"" (L.L.scroll)
+				"" (L.L.scroll) (S.L.stop_request_trig) (S.L.announce_trig)
 					(L.L.clever_LED_time) (C.L.display_change_sec) - (C.L.display_black_sec) >
 						{if}
 							(L.L.clever_LED_mode) s0
@@ -862,10 +935,12 @@
 									{if}
 										(L.L.scroll) =
 										{if}
-											4 (S.L.clever_LED_mode)
-										{else}
 											2 (S.L.clever_LED_mode)
+										{else}	
+											4 (S.L.clever_LED_mode)
 										{endif}
+									{else}
+										1 (L.L.clever_LED_mode) (S.L.clever_LED_time1)
 									{endif}
 								{endif}
 							
@@ -874,7 +949,7 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.announce_trig) =
+										(S.L.announce_trig) (S.L.clever_LED_time1) =
 										{if}
 											2 (S.L.clever_LED_mode)
 										{else}
@@ -883,6 +958,8 @@
 											{else}
 											3 (S.L.clever_LED_mode)
 											{endif}
+										{else}
+											4 (S.L.clever_LED_mode) (S.L.clever_LED_time1)
 										{endif}
 									{else}
 									0 (S.L.clever_LED_mode)
@@ -897,7 +974,7 @@
 										(L.L.scroll) =
 										{if}
 											4 (S.L.clever_LED_mode)
-										{else}
+										{else}	
 											2 (S.L.clever_LED_mode)
 										{endif}
 									{else}
@@ -910,15 +987,15 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.scroll) =
+										(S.L.clever_LED_time1)
 										{if}
-											(S.L.clever_LED_mode) 2 <
+											(C.L.display_black_sec) 0.15 <
 												{if}
 												{else}
-													4 (S.L.clever_LED_mode)
+													5 (S.L.clever_LED_mode)
 												{endif}
 										{else}
-											2 (S.L.clever_LED_mode)
+											2 (S.L.clever_LED_mode) (S.L.announce_trig)
 										{endif}
 									{else}
 									0 (S.L.clever_LED_mode)
@@ -931,9 +1008,9 @@
 									{if}
 										(L.L.scroll) =
 										{if}
-											0 (S.L.clever_LED_mode)
-										{else}
 											2 (S.L.clever_LED_mode)
+										{else}	
+											0 (S.L.clever_LED_mode)
 										{endif}
 									{else}
 									0 (S.L.clever_LED_mode)
@@ -1482,7 +1559,7 @@
 {end}
 
 {macro:announce_pre}
-	(L.L.globaltimer) (S.L.announce_pre_time) (T.L.announce_trig)
+	(L.L.globaltimer) (S.L.announce_pre_time) (L.L.announce_trig) (L.L.scroll)
 {end}
 
 {macro:announce_call}
