@@ -525,6 +525,7 @@
 				
 '			SEQUENCE 3 = AT THE STOP ANNOUNCING UNTIL DEPARTURE	
 			(L.L.ext_announce_seq) 3 =
+			(L.L.door_0) 0.1 > &&
 				{if}
 				
 					(L.L.ext_announce_repeat) 0 =
