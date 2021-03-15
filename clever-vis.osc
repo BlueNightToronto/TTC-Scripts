@@ -835,7 +835,7 @@
 			
 		l0 1 =
 			{if}
-			"STOP REQUESTED" (S.$.clever_LED)
+			"STOP REQUESTED" (L.L.stop_request_trig) (S.$.clever_LED)
 			{endif}	
 			
 		l0 2 =
@@ -864,8 +864,8 @@
 			{else}
 				(L.L.clever_LED_mode) 2 (S.L.clever_LED_mode) (S.$.clever_LED)
 				
-			{endif}	
-			
+				{endif}	
+			(C.L.display_black_sec 0.15 >
 			{endif}
 
 		l0 5 =
@@ -905,7 +905,7 @@
 		
 		(L.L.clever_LED_time) (C.L.display_change_sec) >
 			{if}
-				"" (L.L.scroll)
+				"" (L.L.scroll) (L.L.announce_trig) (L.L.stop_request_trig)
 					(L.L.clever_LED_time) (C.L.display_change_sec) - (C.L.display_black_sec) >
 						{if}
 							(L.L.clever_LED_mode) s0
@@ -938,7 +938,7 @@
 											3 (S.L.clever_LED_mode)
 											{endif}
 										{else}
-											4 (S.L.clever_LED_mode)
+											4 (S.L.clever_LED_mode) (L.L.scroll)
 										{endif}
 									{else}
 									0 (S.L.clever_LED_mode)
