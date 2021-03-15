@@ -830,17 +830,12 @@
 		
 		l0 0 =
 			{if}
-			"System Paused" (S.$.clever_LED)
-					
-				(L.L.clever_run_active) !
-				{if}
-					0 (S.L.clever_LED_time)
-				{endif}
+			"OP ID - 73641" (S.$.clever_LED)
 			{endif}
 			
 		l0 1 =
 			{if}
-			"Stop Request" (S.$.clever_LED)
+			"STOP REQUESTED" (S.$.clever_LED)
 			{endif}	
 			
 		l0 2 =
@@ -867,7 +862,7 @@
 			{if}
 				(L.L.clever_LED_mode) 0 (S.L.clever_LED_mode) (S.$.clever_LED)
 			{else}
-				(L.L.clever_LED_mode) 2 (M.V.clever_LED_mode) (S.$.clever_LED)
+				(L.L.clever_LED_mode) 2 (S.L.clever_LED_mode) (S.$.clever_LED)
 				
 			{endif}	
 			
@@ -942,6 +937,8 @@
 											{else}
 											3 (S.L.clever_LED_mode)
 											{endif}
+										{else}
+											4 (S.L.clever_LED_mode)
 										{endif}
 									{else}
 									0 (S.L.clever_LED_mode)
@@ -953,7 +950,7 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.announce_trig) =
+										(C.L.display_black_sec) =
 										{if}
 											4 (S.L.clever_LED_mode)
 										{else}
@@ -969,9 +966,9 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(L.L.ext_announce_seq) 3 =
+										(C.L.display_change_sec) =
 										{if}
-											(L.L.clever_int_dest) 8 < 
+											(C.L.display_black_sec) 0.15 < 
 												{if}
 												{else}
 													5 (S.L.clever_LED_mode)
