@@ -865,7 +865,7 @@
 				(L.L.clever_LED_mode) 2 (S.L.clever_LED_mode) (S.$.clever_LED)
 				
 				{endif}	
-			(C.L.display_black_sec 0.15 >
+			(C.L.display_black_sec) 0.15 >
 			{endif}
 
 		l0 5 =
@@ -938,7 +938,7 @@
 											3 (S.L.clever_LED_mode)
 											{endif}
 										{else}
-											4 (S.L.clever_LED_mode) (L.L.scroll)
+											4 (S.L.clever_LED_mode) 
 										{endif}
 									{else}
 									0 (S.L.clever_LED_mode)
