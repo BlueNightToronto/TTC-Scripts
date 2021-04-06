@@ -950,7 +950,7 @@
 								{if}
 									(L.L.clever_run_active)
 									{if}
-										(C.L.display_black_sec) =
+										(C.L.display_change_sec) =
 										{if}
 											4 (S.L.clever_LED_mode)
 										{else}
