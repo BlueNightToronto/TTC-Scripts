@@ -170,11 +170,11 @@
 		(S.$.Matrix_TerminusL4)
 		
 		
-		(L.$.Matrix_TerminusL3)
+		(L.$.Matrix_TerminusL3) $length
 		(L.$.Matrix_TerminusL4) $length + 0 >
 		
 			{if}
-				1 (S.L.matrix_flip) (L.$.Matrix_PR1)
+				1 (S.L.matrix_flip) 
 			{else}
 			
 			(L.$.Matrix_PR1) $length + 0 >
@@ -188,8 +188,8 @@
 'Wenn nur die untere Zeile beschrieben ist, dann diese nach oben und untere leeren:
 		(L.$.Matrix_TerminusL1) "" $=
 		{if}
-			(L.$.Matrix_TerminusL2) (S.$.Matrix_TerminusL1) (L.L.matrix_page)
-			"" (S.$.Matrix_TerminusL2) (L.$.Matrix_TerminusL1)
+			(L.$.Matrix_TerminusL2) (S.$.Matrix_TerminusL1)
+			"" (S.$.Matrix_TerminusL2)
 		{endif}
 		
 		(L.$.Matrix_TerminusL3) "" $=
@@ -213,7 +213,7 @@
 				
 				(L.$.Matrix_PR1) "" $=
 				{if}
-					(L.$.Matrix_TerminusL3)
+					(L.$.Matrix_TerminusL3) $length
 					(L.$.Matrix_TerminusL4) $length + 0 >
 						{if}
 							(L.L.matrix_page) ! (S.L.matrix_page)
@@ -225,7 +225,7 @@
 						{if}
 							0 (S.L.matrix_page)
 						{else}
-								(L.$.Matrix_TerminusL3)
+								(L.$.Matrix_TerminusL3) $length
 								(L.$.Matrix_TerminusL4) $length + 0 >
 								{if}
 									(L.L.matrix_page) 1 + (S.L.matrix_page)
